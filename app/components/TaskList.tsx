@@ -5,7 +5,7 @@ import useTodoStore, { Todo } from '../store/todoStore';
 import AddTodoModal from './AddTodo';
 
 const TaskList: React.FC = () => {
-    const { todos, editingTodo, setEditingTodo, deleteTodo, toggleCompletion } = useTodoStore();
+    const { todos, setEditingTodo, deleteTodo, toggleCompletion } = useTodoStore();
     const [filteredTodos, setFilteredTodos] = React.useState<Todo[]>([]);
 
     const [showModal, setShowModal] = React.useState(false);
