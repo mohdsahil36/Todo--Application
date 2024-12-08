@@ -30,14 +30,16 @@ interface TodoStore {
 
 const useTodoStore = create<TodoStore>((set, get) => ({
   todos: [],
-  selectedDate: localStorage.getItem('selectedDate') || new Date().toISOString().split('T')[0],
+  selectedDate: typeof window !== 'undefined' ? localStorage.getItem('selectedDate') || new Date().toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
   filter: 'all',
   editingTodo: null,
 
   addTodo: (todo) => {
     set((state) => {
       const updatedTodos = [...state.todos, todo];
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      }
       return { todos: updatedTodos };
     });
   },
@@ -47,7 +49,9 @@ const useTodoStore = create<TodoStore>((set, get) => ({
       const updatedTodos = state.todos.map((t) =>
         t.id === todo.id ? todo : t
       );
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      }
       return { todos: updatedTodos };
     });
   },
@@ -55,7 +59,9 @@ const useTodoStore = create<TodoStore>((set, get) => ({
   deleteTodo: (id) => {
     set((state) => {
       const updatedTodos = state.todos.filter((todo) => todo.id !== id);
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      }
       return { todos: updatedTodos };
     });
   },
@@ -65,7 +71,9 @@ const useTodoStore = create<TodoStore>((set, get) => ({
       const updatedTodos = state.todos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
       );
-      localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('todos', JSON.stringify(updatedTodos));
+      }
       return { todos: updatedTodos };
     });
   },
@@ -73,7 +81,9 @@ const useTodoStore = create<TodoStore>((set, get) => ({
   setFilter: (filter) => set({ filter }),
 
   setSelectedDate: (date) => {
-    localStorage.setItem('selectedDate', date);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedDate', date);
+    }
     set({ selectedDate: date });
   },
 
@@ -90,9 +100,11 @@ const useTodoStore = create<TodoStore>((set, get) => ({
   },
 
   initializeTodos: () => {
-    const storedTodos = localStorage.getItem('todos');
-    if (storedTodos) {
-      set({ todos: JSON.parse(storedTodos) });
+    if (typeof window !== 'undefined') {
+      const storedTodos = localStorage.getItem('todos');
+      if (storedTodos) {
+        set({ todos: JSON.parse(storedTodos) });
+      }
     }
   },
 

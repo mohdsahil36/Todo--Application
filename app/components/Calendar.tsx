@@ -8,9 +8,11 @@ const Calendar: React.FC = () => {
   const [selectedDate, setSelectedDateState] = useState<string>(new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
-    const storedDate = localStorage.getItem('selectedDate');
-    if (storedDate) {
-      setSelectedDateState(storedDate);
+    if (typeof window !== 'undefined') {
+      const storedDate = localStorage.getItem('selectedDate');
+      if (storedDate) {
+        setSelectedDateState(storedDate);
+      }
     }
   }, []);
 
